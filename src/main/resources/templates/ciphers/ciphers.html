@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Management System</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a th:href="@{/app/v1/auth}" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="@{/app/v1/auth}" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<br>
+<div class="container">
+	<ul class="collection with-header">
+		<li class="collection-header">
+			<h4 class="center">
+				<a style="color: black" href="/app/v1/ciphers">Шифри дисциплін</a>
+				<a href="/app/v1/ciphers/create" class="btn-floating btn-large waves-effect waves-light grey text-black lighten-2"><i class="material-icons">add</i></a>
+			</h4>
+			<br>
+			<form id="searchForm" class="searchForm" action="/app/v1/ciphers/" method="get">
+				<input class="search" type="search" name="searchValue">
+				<i class="fa fa-search"></i>
+			</form>
+		</li>
+		<tr th:each="cipher : ${ciphers}">
+			<form id="deleteForm" method="post" th:action="@{/app/v1/ciphers/delete}">
+				<li class="collection-item">
+					<div class="row">
+						<h6 class="col s10" th:text="${cipher.getName() + ' '} + ' : ' + ${cipher.getDescription()}"></h6>
+						<input name="cipherId" class="hide" th:value="${cipher.getId()}">
+
+						<button class="btn waves-effect grey lighten-2 black-text right col s2" type="submit" name="action">
+							<i class="material-icons">delete</i>
+						</button>
+					</div>
+				</li>
+			</form>
+			<div class="divider"></div>
+		</tr>
+
+	</ul>
+</div>
+</body>
+</html>
+<style>
+	.searchForm{
+		position: relative;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		transition: all 1s;
+		width: 50px;
+		height: 50px;
+		background: white;
+		box-sizing: border-box;
+		border-radius: 25px;
+		border: 4px solid white;
+		padding: 5px;
+	}
+
+	input{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;;
+		height: 42.5px;
+		line-height: 30px;
+		outline: 0;
+		border: 0;
+		display: none;
+		font-size: 1em;
+		border-radius: 20px;
+		padding: 0 20px;
+	}
+
+	.fa{
+		box-sizing: border-box;
+		padding: 10px;
+		width: 42.5px;
+		height: 42.5px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		border-radius: 50%;
+		color: #07051a;
+		text-align: center;
+		font-size: 1.2em;
+		transition: all 1s;
+	}
+
+  .searchForm:hover{
+		width: 200px;
+		cursor: pointer;
+	}
+
+  .searchForm:hover input{
+		display: block;
+	}
+
+  .searchForm:hover .fa{
+		background: #07051a;
+		color: white;
+	}
+</style>

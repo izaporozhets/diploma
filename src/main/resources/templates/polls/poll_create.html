@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Опитування</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a th:href="'/app/v1/auth'" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="'/app/v1/group?pageNumber=1&searchValue=&groupId=' + ${groupId} +'&pollId='" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<br>
+<div class="container">
+	<form th:action="@{/app/v1/polls}" th:object="${createRequest}" method="POST" >
+		<input class="hide" id="groupId" name="groupId" th:value="${groupId}" th:field="*{groupId}">
+		<ul class="collection with-header">
+			<li class="collection-header"><h4 class="center">Опитування</h4></li>
+			<li class="collection-item">
+				<div class="row">
+					<div class="input-field col s6">
+						<h6>Сповіщення
+							<div class="right">
+								<label>
+									<i class="material-icons">send</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<select name="interval" th:field="*{intervalId}">
+							<option selected disabled value="">Оберіть інтервал</option>
+							<tr th:each="interval : ${T(org.example.enums.IntervalEnum).values()}">
+								<option th:value="${interval.getId()}" th:text="${interval.getDescription()}"></option>
+							</tr>
+						</select>
+					</div>
+					<div class="input-field col s6">
+						<h6>Оберіть кількість відповідей
+							<div class="right">
+								<label>
+									<i class="material-icons">plus_one</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<select name="answersNumber" th:field="*{questionsNumber}">
+							<option value="" disabled selected>Оберіть кількість</option>
+							<tr th:each="answer : ${answersAmount}">
+								<option th:value="${answer}" th:text="${answer}">1</option>
+							</tr>
+						</select>
+					</div>
+					<div class="input-field col s6">
+						<h6>Семестр
+							<div class="right">
+								<label>
+									<i class="material-icons">supervisor_account</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<select name="semesterNumber" th:field="*{semester}">
+							<option value="" disabled selected>Оберіть курс</option>
+							<tr th:each="semester : ${semesters}">
+								<option th:value="${semester}" th:text="${semester}">1</option>
+							</tr>
+						</select>
+					</div>
+					<div class="input-field col s6">
+						<h6>Факультет
+							<div class="right">
+								<label>
+									<i class="material-icons">school</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<input placeholder="Факультет" name="faculty" type="text" class="validate" th:field="*{facultyName}">
+					</div>
+				</div>
+				<br>
+			</li>
+			<li class="collection-item">
+				<br>
+				<div class="center">
+					<button class="btn waves-effect grey lighten-2 black-text" type="submit" name="action">Відправити
+						<i class="material-icons right">send</i>
+					</button>
+				</div>
+				<br>
+				<br>
+
+			</li>
+
+		</ul>
+
+	</form>
+</div>
+</body>
+</html>
+
+<script>
+	$(document).ready(function(){
+		$('select').formSelect();
+	});
+</script>

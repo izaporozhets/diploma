@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Опитування</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a th:href="'/app/v1/auth'" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="@{/app/v1/ciphers}" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<br>
+<div class="container">
+	<form th:action="@{/app/v1/ciphers/create}" th:object="${request}" method="POST" >
+		<ul class="collection with-header">
+			<li class="collection-header"><h4 class="center">Створення шифру</h4></li>
+			<li class="collection-item">
+				<div class="row">
+					<div class="input-field col s6">
+						<h6>Шифр
+							<div class="right">
+								<label>
+									<i class="material-icons">school</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<input placeholder="Введіть назву шифру" name="cipherName" type="text" class="validate" th:field="*{cipherName}">
+					</div>
+					<div class="input-field col s6">
+						<h6>Назва дисципліни
+							<div class="right">
+								<label>
+									<i class="material-icons">school</i>
+									<span></span>
+								</label>
+							</div>
+						</h6>
+						<input placeholder="Введіть назву дисципліни" name="cipherDescription" type="text" class="validate" th:field="*{cipherDescription}">
+					</div>
+				</div>
+				<br>
+			</li>
+			<li class="collection-item">
+				<br>
+				<div class="center">
+					<button class="btn waves-effect grey lighten-2 black-text" type="submit" name="action">Створити
+						<i class="material-icons right">send</i>
+					</button>
+				</div>
+				<br>
+				<br>
+
+			</li>
+
+		</ul>
+
+	</form>
+</div>
+</body>
+</html>

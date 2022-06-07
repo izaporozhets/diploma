@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>New patient</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a href="/app/v1/auth" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="@{/app/v1/users}" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<div class="container">
+	<form th:action="@{'/app/v1/users/register'}" th:object="${registrationRequest}" method="POST">
+		<ul class="collection with-header">
+			<li class="collection-header"><h4>Заповнення даних користувача</h4></li>
+			<li class="collection-item">
+				<div class="row">
+					<div class="input-field col s6">
+						<h6>Прізвище</h6>
+						<input placeholder="Прізвище" name="surname" type="text" class="validate" th:field="*{surname}">
+						<p class="red-text" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
+					</div>
+					<div class="input-field col s6">
+						<h6>Ім`я</h6>
+						<input placeholder="Ім`я" name="name" type="text" class="validate" th:field="*{name}">
+						<p class="red-text" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+					</div>
+					<div class="input-field col s6">
+						<h6>По-батькові</h6>
+						<input placeholder="По-батькові" name="patronymic" type="text" class="validate" th:field="*{patronymic}">
+						<p class="red-text" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}"></p>
+					</div>
+					<div class="input-field col s6">
+						<h6>Роль</h6>
+						<select name="roleName" th:field="*{roleName}">
+							<tr th:each="role : ${roleNames}">
+								<option th:value="${role}" th:text="${role}"></option>
+							</tr>
+						</select>
+						<p class="red-text" th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}"></p>
+					</div>
+				</div>
+			</li>
+			<li class="collection-item">
+				<div class="row">
+					<div class="input-field col s6">
+						<h6>Юзернейм</h6>
+						<input placeholder="Юзернейм" name="username" type="text" class="validate" th:field="*{username}">
+						<p class="red-text" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+						<p class="red-text" th:if="${usernameTaken == true}">Користувач с таким юзернеймом вже існує</p>
+					</div>
+					<div class="input-field col s6">
+						<h6>Тимчасовий пароль</h6>
+						<input placeholder="Тимчасовий пароль" name="temporaryPassword" type="password" class="validate" th:field="*{temporaryPassword}">
+						<p class="red-text" th:if="${mustBeMore == true}">Пароль повинен містити більше 8 символів</p>
+						<p class="red-text" th:if="${mustContainUpper == true}">Пароль повинен містити хоча б 1 символ у верхньому регістрі</p>
+						<p class="red-text" th:if="${mustContainLower == true}">Пароль повинен містити хоча б 1 символ у нижньому регістрі</p>
+						<p class="red-text" th:if="${mustContainDigit == true}">Пароль повинен містити хоча б 1 цифру</p>
+						<p class="red-text" th:if="${mustContainSpecial == true}">Пароль повинен містити хоча б 1 спеціальний символ</p>
+					</div>
+				</div>
+			</li>
+			<br>
+			<div class="row">
+				<div class="center">
+					<button class="btn waves-effect grey lighten-2 black-text" type="submit" name="action">Submit
+						<i class="material-icons right">send</i>
+					</button>
+				</div>
+			</div>
+		</ul>
+	</form>
+</div>
+</body>
+</html>
+<script>
+	$(document).ready(function(){
+		$('select').formSelect();
+	});
+</script>

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      validCheckSum: ANY
+      id: 06052022_initial_database_structure
+      author: i.Zaporozhets
+      preConditions:
+        - onFail: HALT
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            encoding: utf8
+            path: db/migrations/000_clean_tables.sql
+        - sqlFile:
+            dbms: postgresql
+            encoding: utf8
+            path: db/migrations/001_create_table.sql
+        - sqlFile:
+            dbms: postgresql
+            encoding: utf8
+            path: db/migrations/002_initial_inserts.sql

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Revision</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('select').selectize({
+				sortField: 'text'
+			});
+		});
+
+	</script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+	</div>
+</nav>
+<br>
+<br>
+<form th:method="get" th:action="@{/app/v1/polls/finish}" th:object="${createAnswer}">
+	<input class="hide" th:value="${createAnswer.getPollId()}" th:field="*{pollId}" name="pollId">
+	<input class="hide" th:value="${createAnswer.getStudentId()}" th:field="*{studentId}" name="studentId">
+
+	<div th:if="${isEditable} == true" th:class="'container'">
+		<ul class="collection with-header">
+			<li class="collection-header">
+				<h6 class="green-text" th:if="${chosenAnswers} != null" th:text="'Відповідь збережена'">SSS</h6>
+				<h4 class="col s6" th:text="${chosenAnswers} != null ? 'Ви можете змінити рішення' : 'Оберіть шифри дісциплін'">Оберіть шифри дісциплін</h4>
+				<h6 class="red-text col s3" th:if="${sizeError == true}">Не можна обирати однакові шифри</h6>
+				<h6 class="red-text col s3" th:if="${noneAnswersError == true}">Заповніть усі поля</h6>
+
+			</li>
+			<li class="collection-item">
+				<div class="row" th:if="${questions != null && chosenAnswers == null}" th:each="question : ${#numbers.sequence(1, questions)}">
+					<br>
+					<h6 class="col s1" th:text="${question} + ' : '">
+
+					</h6>
+					<div class="col s11" style=" margin-top: 5px">
+						<select th:field="*{cipherIds[__${question - 1}__]}">
+							<option value="" disabled selected>Оберіть шифр</option>
+							<tr th:each="cipher : ${ciphers}">
+								<option th:value="${cipher.getId()}" th:text="${cipher.getName()} + ' : ' + ${cipher.getDescription()}"></option>
+							</tr>
+						</select>
+					</div>
+				</div>
+
+				<div class="row" th:if="${chosenAnswers != null}" th:each="answer, stat : ${chosenAnswers}">
+					<br>
+					<h6 class="col s1" th:text="${stat.index+1} + ' : '">
+
+					</h6>
+					<div class="col s11" style=" margin-top: 5px">
+						<select th:field="*{cipherIds[__${stat.index}__]}">
+							<option th:value="${answer.getId()}" th:text="${answer.getName()} + ' : ' + ${answer.getDescription()}" >Оберіть шифр</option>
+							<tr th:each="cipher : ${ciphers}">
+								<option th:if="${cipher.getId() != answer.getId()}" th:value="${cipher.getId()}" th:text="${cipher.getName()} + ' : ' + ${cipher.getDescription()}"></option>
+
+							</tr>
+						</select>
+					</div>
+				</div>
+
+			</li>
+			<li class="collection-item">
+				<br>
+				<div class="center">
+					<button class="btn waves-effect grey lighten-2 black-text" type="submit" name="action" th:text="${chosenAnswers == null} ? 'Відправити' : 'Змінити'">
+						<i class="material-icons right">send</i>
+					</button>
+				</div>
+				<br>
+			</li>
+		</ul>
+	</div>
+	<div th:if="${isEditable} == false" th:class="'container'">
+		<ul class="collection with-header">
+			<li class="collection-header">
+				<h4 class="green-text center">Опитування пройдено</h4>
+			</li>
+			<li class="collection-item" th:if="${chosenAnswers != null}" th:each="answer, stat : ${chosenAnswers}">
+					<br>
+					<h6 th:text="${stat.index+1} + ' : ' + ${answer.getName()} + ' : ' + ${answer.getDescription()}"></h6>
+			</li>
+		</ul>
+	</div>
+</form>
+</body>
+</html>

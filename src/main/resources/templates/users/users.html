@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Management System</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('select').selectize({
+				sortField: 'text'
+			});
+		});
+
+	</script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a th:href="@{/app/v1/auth}" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="@{/app/v1/auth}" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<br>
+<br>
+<div class="container">
+	<div class="row">
+		<div class="center">
+		<a   class="waves-effect waves-light btn right" th:href="@{/app/v1/users/create}">Додати користувача<i class="material-icons left">contacts</i></a>
+			<form id="forsearch" class="searchForm" th:action="@{/app/v1/users}" method="get">
+				<input class="search" type="search" name="search">
+				<i class="fa fa-search"></i>
+			</form>
+		</div>
+	</div>
+	<div class="col s12">
+		<table border="1" class = "table table-striped table-responsive-ms">
+			<thead>
+			<tr>
+				<th class="center">
+					Прізвище
+				</th>
+				<th class="center">
+					Ім`я
+				</th>
+				<th class="center">
+					По-батькові
+				</th>
+				<th class="center">
+					Юзернейм
+				</th>
+				<th class="center">
+					Роль
+				</th>
+				<th class="center">
+					Останній логін
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="user : ${users}">
+				<td th:text="${user.getSurname()}" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td th:text="${user.getName()}" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td th:text="${user.getPatronymic()}" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td th:text="${user.getUsername()}" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td th:text="${user.getRoleName()}" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td th:text="${user.getLastLogin() != null} ? ${user.getLastLogin().toString().replace('T', ' ')} : ' '" class="center" th:class="${user.getIsPasswordConfirmed()} ? 'black-text center' : 'grey-text center'"></td>
+				<td>
+					<form method="post" th:action="@{/app/v1/users/delete}" >
+						<input name="userId" class="hide" th:value="${user.getId()}">
+						<button class="btn waves-effect grey lighten-2 black-text right col s2" type="submit" name="action">
+							<i class="material-icons">delete</i>
+						</button>
+					</form>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>
+
+<style>
+	#forsearch{
+		position: relative;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		transition: all 1s;
+		width: 50px;
+		height: 50px;
+		background: white;
+		box-sizing: border-box;
+		border-radius: 25px;
+		border: 4px solid white;
+		padding: 5px;
+	}
+
+
+	.fa{
+		box-sizing: border-box;
+		padding: 10px;
+		width: 42.5px;
+		height: 42.5px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		border-radius: 50%;
+		color: #07051a;
+		text-align: center;
+		font-size: 1.2em;
+		transition: all 1s;
+	}
+
+	#forsearch:hover{
+		width: 200px;
+		cursor: pointer;
+	}
+
+	#forsearch:hover input{
+		display: block;
+	}
+
+	#forsearch:hover .fa{
+		background: #07051a;
+		color: white;
+	}
+</style>

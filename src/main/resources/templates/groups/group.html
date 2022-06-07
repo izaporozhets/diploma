@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Management System</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('select').selectize({
+				sortField: 'text'
+			});
+		});
+
+	</script>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a th:href="@{/app/v1/auth}" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+		<ul class="left hide-on-med-and-down">
+			<li><a th:href="@{/app/v1/groups}" class="black-text left"><i class="large material-icons">keyboard_backspace</i></a></li>
+		</ul>
+	</div>
+</nav>
+<br>
+<div class="container">
+	<div class="row">
+		<br>
+		<div class="col s12">
+			<div class="col s3">
+				<a th:href="${group.getCurrentPoll()} != null ? '/app/v1/polls/' + ${group.getCurrentPoll().getId()} + '/export' : '#'" th:class="(${group.getCurrentPoll()  != null && group.getVotedStudents() != 0}) ? 'waves-effect waves-light btn left' : 'btn disabled left'">Експорт</a>
+			</div>
+			<div class="col s3">
+				<form th:action="@{'/app/v1/polls/edit'}" th:object="${groupPageRequest}" method="POST">
+					<input type="hidden" th:value="${group.getCurrentPoll() != null} ? ${group.getCurrentPoll().getId()} : null" name="pollId">
+					<input hidden th:field="*{groupId}" th:value="${group.getId()}" name="groupId">
+					<input hidden th:field="*{searchValue}" th:value="''" name="searchValue">
+					<input hidden th:field="*{pageNumber}" th:value="1" name="pageNumber">
+					<input type="hidden" th:value="${group.getCurrentPoll() != null} ? ${group.getCurrentPoll().getIntervalName()}  : null" name="intervalName">
+					<input type="hidden" th:value="${group.getCurrentPoll() != null} ? ${group.getCurrentPoll().isEditable}  : null" name="isEditEnabled">
+					<button th:class="${group.getCurrentPoll()} != null ? ( ${group.getCurrentPoll().getIsEditable()} ? 'waves-effect red lighten-2 btn center' : 'waves-effect waves-light btn center' ) : 'btn disabled center'" th:text="${group.getCurrentPoll()} != null ? ( ${group.getCurrentPoll().getIsEditable()} ? 'Закрити опитування' : 'Відкрити опитування' ) : 'Оберіть опитування' " type="submit" name="action">
+					</button>
+				</form>
+			</div>
+			<div class="col s3">
+				<a th:href="@{'/app/v1/polls/' + ${group.getId()}}" class="waves-effect waves-light btn right">Створити</a>
+			</div>
+			<form class="col s3" th:action="@{'/app/v1/polls/remind'}" th:object="${groupPageRequest}" method="POST">
+				<input type="hidden" th:value="${group.getCurrentPoll() != null} ? ${group.getCurrentPoll().getId()} : null" name="pollId">
+				<input hidden th:field="*{groupId}" th:value="${group.getId()}" name="groupId">
+				<button th:class="${group.getCurrentPoll()} != null ? (${group.getCurrentPoll().getIsEditable()} ? 'waves-effect waves-light btn right' : 'btn disabled right') : 'btn disabled right'"  type="submit" name="action">Нагадати</button>
+			</form>
+		</div>
+		<br>		<br>
+
+		<div class="input-field">
+			<form th:action="@{/app/v1/group}" th:object="${groupPageRequest}" method="GET">
+				<select onchange="this.form.submit()" th:field="*{pollId}">
+					<option value="" th:text="'' + ${group.getCurrentPoll() != null ? group.getCurrentPoll().getName() : 'Оберіть опитування'}">Оберіть опитування</option>
+					<tr th:each="poll : ${group.getPollData()}">
+						<option th:value="${poll.getId()}" th:text="${poll.getName()}" name="pollId"></option>
+					</tr>
+				</select>
+				<input hidden th:field="*{groupId}" th:value="${group.getId()}" name="groupId">
+				<input hidden th:field="*{searchValue}" th:value="''" name="searchValue">
+				<input hidden th:field="*{pageNumber}" th:value="1" name="pageNumber">
+			</form>
+		</div>
+		<div class="divider"></div>
+		<div class="section">
+			<h6 th:text="'Факультет : ' + ${group.getCurrentPoll() != null ? group.getCurrentPoll().getFacultyName() : ''}">Факультет</h6>
+		</div>
+		<div class="divider"></div>
+		<div class="section">
+			<h6 th:text="'Семестр : ' + ${group.getCurrentPoll() != null ? group.getCurrentPoll().getSemester() : ''}">Семестр</h6>
+		</div>
+		<div class="divider"></div>
+		<div class="section">
+			<h6 th:text="'Пройшли опитування : ' + ${group.getVotedStudents()} + ' з ' + ${group.getStudentsCount()}">Пройшли опитування</h6>
+		</div>
+		<div class="divider"></div>
+		<div th:class="${group.getCurrentPoll() != null && group.getCurrentPoll().getIsEditable()} ? 'section' : 'hide'">
+			<h6>Сповіщення
+			<div class="col s6 right">
+				<select>
+					<option selected disabled th:text="'' + ${group.getCurrentPoll() != null ? group.getCurrentPoll().getIntervalName() : 'Оберіть інтервал'}">Оберіть інтервал</option>
+					<tr th:each="interval : ${group.getIntervalData()}">
+						<option th:if="${group.getCurrentPoll() != null && !group.getCurrentPoll().getIntervalName().equals(interval.getDescription())}" th:value="${interval.getId()}" th:text="${interval.getDescription()}"></option>
+					</tr>
+				</select>
+			</div>
+			</h6>
+		</div>
+	</div>
+
+	<div class="col s12">
+		<table border="1" class = "table table-striped table-responsive-ms">
+			<thead>
+			<tr>
+				<th>
+					Студент
+				</th>
+				<th>
+					Обрані шифри
+				</th>
+				<th>
+					Опитування пройдено
+				</th>
+				<th>
+					Останнє нагадування
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="student : ${group.getStudentList()}">
+				<td th:text="${student.getName()}" th:class="${student.getHasAnswered()} ? 'green-text' : 'red-text'"></td>
+				<td th:text="${student.getAnswerData() == null ? '' : (student.getAnswerData().getListCiphers().size() != 0 ? student.getAnswerData().getListNames() : '')}"></td>
+				<td th:text="${student.getAnswerData()  == null ? '' : (student.getAnswerData().getAnswerDate() == null ? '' : student.getAnswerData().getAnswerDate().toString().replace('T', ' '))}"></td>
+				<td th:text="${student.getRemindedAt() == null ? '' : student.getRemindedAt().toString().replace('T', ' ')}"></td>
+				<td><i class="material-icons" th:text="${student.hasAnswered} ? 'check' : 'clear'"></i></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>
+

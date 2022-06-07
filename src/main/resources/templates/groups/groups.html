@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<nav>
+	<div class="nav-wrapper brown lighten-5">
+		<a href="/app/v1/auth" class="brand-logo center black-text" style="text-decoration: none">Report manager</a>
+
+		<ul id="nav-mobile" class="left hide-on-med-and-down">
+			<a href="/app/v1/auth" >
+				<i class="medium material-icons" style="color: black">home</i>
+			</a>
+		</ul>
+		<ul id="nav-mobile " class="right hide-on-med-and-down ">
+			<li><a href="/logout" class="black-text">Выход</a></li>
+		</ul>
+	</div>
+</nav>
+<div class="container">
+	<h4 class="center">
+		Групи
+	</h4>
+	<div class="row">
+		<div class="col s2">
+			<h4></h4>
+		</div>
+		<div class="col s8">
+			<div class="row">
+				<div class="col s12">
+					<div class="row">
+						<div class="input-field col s12">
+							<form id="selectForm" class="searchForm" action="/app/v1/groups"  th:object="${searchDto}" th:method="'GET'">
+								<i class="material-icons prefix">find_in_page</i>
+								<input id="autocomplete-input" class="autocomplete" th:field="*{searchValue}" th:value="*{searchValue != null} ? *{searchValue} : null" name="searchValue">
+								<input class="hide" id="pageNumber" th:field="*{pageNumber}" th:value="*{pageNumber}" name="pageNumber">
+								<label for="autocomplete-input">Введіть назву групи</label>
+								<input type="submit" style="display: none" />
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<table class = "highlight">
+				<tr>
+					<th class="">
+						Назва
+					</th>
+					<th class="center right">
+						Действия
+					</th>
+				</tr>
+				<tbody>
+				<tr th:each="group, item : ${groupList}">
+					<td th:text="${group.name}"></td>
+					<td class="center right">
+						<a th:href="@{'/app/v1/group?groupId=' + ${group.id} + '&searchValue=&?pageNumber=1&?pollId='}" class="btn brown lighten-4 black-text" style="text-decoration: none">Переглянути</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+</div>
+
+<div class="row">
+
+	<ul class="pagination center">
+
+		<li th:each="num, item : ${range}" th:class="${item.index == searchDto.getPageNumber()} ? 'active' : 'waves-effect'">
+			<a th:href="'/app/v1/groups?pageNumber=' + ${num - 1} + '&searchValue=' + ${searchDto.getSearchValue()}" th:text="${item.first or item.last} ? null: ${num - 1}">
+			</a>
+		</li>
+
+	</ul>
+
+</div>
+
+</body>
+</html>

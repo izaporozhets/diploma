@@ -1,0 +1,39 @@
+
+app:
+  id: d454f70d-bfee-470f-8f28-8dbb465e4864
+  scopes: User.Read,Group.ReadWrite.All,GroupMember.Read.All,Group.Read.All,GroupMember.ReadWrite.All,Group.ReadWrite.All,Directory.Read.All,ChatMessage.Send,Chat.ReadWrite
+
+server:
+  port: 8080
+
+spring:
+
+  application:
+    name: subject
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/diploma
+    username: username
+    password: root
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/migrations/db.changelog-master.yaml
+    url: ${spring.datasource.url}
+    liquibase-schema: public
+    database-change-log-table: covid_schema_history
+    database-change-log-lock-table: covid_schema_lock_history
+
+  jpa:
+    #    show-sql: true
+    properties:
+      hibernate:
+        format_sql:
+          true
+
+        # The SQL dialect makes Hibernate generate better SQL for the chosen database
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+        # Hibernate ddl auto (create, create-drop, validate, update)
+        ddl-auto: none
+        generate_statistics: false

@@ -72,6 +72,49 @@
 		  <artifactId>spring-boot-starter-validation</artifactId>
 		  <version>2.6.7</version>
 	  </dependency>
+
+	  <dependency>
+		  <groupId>com.azure</groupId>
+		  <artifactId>azure-identity</artifactId>
+		  <version>1.5.1</version>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>com.microsoft.graph</groupId>
+		  <artifactId>microsoft-graph</artifactId>
+		  <version>5.23.0</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>31.1-jre</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi</artifactId>
+		  <version>5.2.2</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi-ooxml</artifactId>
+		  <version>5.2.2</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>2.6</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.awaitility</groupId>
+		  <artifactId>awaitility</artifactId>
+		  <version>4.2.0</version>
+		  <scope>test</scope>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.passay</groupId>
+		  <artifactId>passay</artifactId>
+		  <version>1.6.1</version>
+	  </dependency>
   </dependencies>
 
   <build>

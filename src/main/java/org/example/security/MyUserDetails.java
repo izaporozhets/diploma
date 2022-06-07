@@ -4,11 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class MyUserDetails implements UserDetails {
+
 	private final String login;
-	private final String                       password;
+	private final String password;
 	private final List<SimpleGrantedAuthority> authorities;
 
 	public MyUserDetails(String login, String password, List<SimpleGrantedAuthority> authorities) {
@@ -52,10 +54,10 @@ public class MyUserDetails implements UserDetails {
 		return true;
 	}
 
-	//public static UserDetails fromWorker(org.example.entity.User user){
-	//	return new User(user.getLogin(), user.getPassword(),
-	//		true,true,
-	//		true,true,
-	//		user.getRole().getAuthorities());
-	//}
+	public static UserDetails fromUser(org.example.entity.User user){
+		return new User(user.getUsername(), user.getPassword(),
+			true,true,
+			true,true,
+			user.getRoleEnum().getAuthorities());
+	}
 }
